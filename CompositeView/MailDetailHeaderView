@@ -1,0 +1,50 @@
+import android.content.Context
+import android.util.AttributeSet
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.RelativeLayout
+import android.widget.TextView
+import com.example.myapplication.Data.MailData
+import com.example.myapplication.Domain.Mail
+import com.example.myapplication.R
+import java.text.SimpleDateFormat
+import java.util.*
+
+class MailDetailHeaderView : RelativeLayout {
+
+    constructor(context: Context) : super(context)
+
+    constructor(context: Context, attr: AttributeSet) : super(context, attr)
+
+    constructor(
+        context: Context,
+        attrs: AttributeSet?,
+        defStyleAttr: Int
+    ) : super(context, attrs, defStyleAttr)
+
+    init {
+        LayoutInflater.from(context).inflate(R.layout.mail_detail_sender_view, this, true)
+    }
+
+    fun setData(mailData: Mail) {
+        with(mailData) {
+            val folderName = MailData.getInstance(context).getfoldername(folderId)
+            val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH)
+            val myDate: Date = sdf.parse(date)
+            sdf.applyPattern("EEE, d MMM yyyy")
+            val dateText: String = sdf.format(myDate)
+            val mailId = findViewById<View>(R.id.mail_id_text) as TextView
+            mailId.text = from
+            val date = findViewById<View>(R.id.date_text) as TextView
+            date.text = dateText
+            val timeText = findViewById<View>(R.id.time_text) as TextView
+            timeText.text = time
+            val toText = findViewById<View>(R.id.to_text) as TextView
+            toText.text = "To : $to"
+            val dp = findViewById<View>(R.id.dp_text) as TextView
+            dp.text = from.substring(0, 1).toUpperCase()
+            val folder = findViewById<View>(R.id.folder_name) as TextView
+            folder.text = "\u2022 $folderName"
+        }
+    }
+}
