@@ -1,0 +1,65 @@
+Variable:
+
+Variable name should be intention revealing.
+
+Bad practice :
+
+for (i in eventReminderList)
+
+Good Practice:
+
+for (reminder in eventReminderList)
+
+
+Avoid dis-information.
+
+Bad practice :
+
+val list = mutableListOf<Mail>()
+
+Good Practice:
+
+val mailList = mutableListOf<Mail>() (or)
+
+val mail = mutableListOf<Mail>()
+
+
+Replace magic numbers with named constants.
+
+Bad practice :
+
+eventReminderList.size <= 4
+
+Good Practice:
+
+eventReminderList.size <= EventRules.getMaxRemindersCount()
+
+mSelectedPos - m prefix should be removed.
+
+Functions:
+
+It should be a verb.
+
+It should start in lowercase and in camelCase.
+
+showReminder()
+
+Make meaningful distinctions:
+
+addEvent and insertEvent has the same meaning 
+
+Use any one throughout the class to avoid 
+
+Class:
+
+It should be in noun.
+
+It should start with Upper case and in camelCase.
+
+Good Practice:
+
+EventDetailReminderView
+
+Bad Practice:
+
+eventDetailReminderView
