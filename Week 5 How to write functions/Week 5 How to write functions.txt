@@ -1,0 +1,90 @@
+Avoid flag arguments
+
+Good practice:
+
+interface ReminderChangeListener {
+        fun onReminderAdded(reminder: String)
+        fun onReminderRemoved(reminder: String)
+    }
+
+Bad Practice:
+
+interface ReminderChangeListener {
+        fun onReminderAdded(reminder: String, isDeleted: Boolean)
+    }
+
+Single Responsibility 
+
+Bad Practice:
+
+fun showReminders(reminders: MutableList<String>, listener: ReminderChangeListener) {
+		
+	  this.listener = listener
+        this.eventReminderList = reminders
+        eventReminderContainer.removeAllViews()
+
+        for (reminder in eventReminderList) {
+            addReminderToView(reminder)
+        }
+
+        if (!isRemindersLimitReached(eventReminderList)) {
+            showAddReminder()
+        } else {
+            addReminderText.makeGone()
+        }
+    }
+
+It should only show reminders, but in this it is also setting up a listener.
+
+Good Practice:
+
+fun showReminders(reminders: MutableList<String>) {
+        this.eventReminderList = reminders
+        eventReminderContainer.removeAllViews()
+
+        for (reminder in eventReminderList) {
+            addReminderToView(reminder)
+        }
+
+        if (!isRemindersLimitReached(eventReminderList)) {
+            showAddReminder()
+        } else {
+            addReminderText.makeGone()
+        }
+    }
+
+ fun setListener(listener: ReminderChangeListener) {
+        this.listener = listener
+    }
+
+Loops should contain one line:
+
+Good Prcatice:
+
+for (reminder in eventReminderList) {
+            addReminderToView(reminder)
+        }
+
+
+
+Bad Practice:
+
+for (reminder in eventReminderList) {
+           val reminderView = LayoutInflater.from(context).inflate(
+            R.layout.event_detail_reminder_item,
+            eventReminderContainer,
+            false
+        )
+        val reminderText = reminderView.findViewById<TextView>(R.id.reminder_text)
+        val removeReminderIcon = reminderView.findViewById<ImageView>(R.id.remove_reminder_icon)
+        reminderText.text = reminder
+        removeReminderIcon.setOnClickListener {
+            listener.onReminderRemoved(reminder)
+        }
+        eventReminderContainer.addView(reminderView)
+        }
+
+
+Avoid duplicate code
+
+Avoid dead code
