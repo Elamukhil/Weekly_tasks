@@ -88,3 +88,125 @@ for (reminder in eventReminderList) {
 Avoid duplicate code
 
 Avoid dead code
+
+
+Encapsulate Conditional Statement:
+
+
+Bad Practice:
+
+if (!android.util.Patterns.EMAIL_ADDRESS.matcher(string).matches()) {
+                val builder = AlertDialog.Builder(this)
+                builder.setMessage("Email id is invalid")
+                builder.setIcon(android.R.drawable.ic_dialog_alert)
+
+                //performing positive action
+                builder.setPositiveButton("OK") { _, _ ->
+                }
+                val alertDialog: AlertDialog = builder.create()
+                alertDialog.setCancelable(false)
+                alertDialog.show()
+                true
+            }
+
+Good Practice:
+
+if (!isValidEmail(string)) {
+                val builder = AlertDialog.Builder(this)
+                builder.setMessage("Email id is invalid")
+                builder.setIcon(android.R.drawable.ic_dialog_alert)
+
+                //performing positive action
+                builder.setPositiveButton("OK") { _, _ ->
+                }
+                val alertDialog: AlertDialog = builder.create()
+                alertDialog.setCancelable(false)
+                alertDialog.show()
+                true
+            }
+
+isValidEmail(email : String) {
+return android.util.Patterns.EMAIL_ADDRESS.matcher(string).matches()
+}
+
+Remove Flag Arguments.
+
+Bad Practice:
+
+public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+		{
+			allDay = isChecked;
+			if (isChecked)
+			{
+				startTimeView.setVisibility(View.INVISIBLE);
+				endTimeView.setVisibility(View.INVISIBLE);
+			}
+			else
+			{
+				startTimeView.setVisibility(View.VISIBLE);
+				endTimeView.setVisibility(View.VISIBLE);
+			}
+		}
+
+Good Practice:
+
+public void onAllDayChecked(CompoundButton buttonView) {
+				startTimeView.setVisibility(View.INVISIBLE);
+				endTimeView.setVisibility(View.INVISIBLE);
+}
+
+public void onAllDayUnChecked(CompoundButton buttonView) {
+
+				startTimeView.setVisibility(View.VISIBLE);
+				endTimeView.setVisibility(View.VISIBLE);
+}
+
+
+Create functions for each case.
+
+Bad Practice:
+
+for(String calendarId:calendarIdSet)
+				{
+					View calendarItemRow = getActivity().getLayoutInflater().inflate(R.layout.add_event_spinner_item, null);
+					calendarItemRow.setOnClickListener(mCalendarClickListener);
+					((TextView) calendarItemRow).setText(CalendarUtil.ownCalendarMapVsZuId.get(mCurrentZuid).get(calendarId));
+					calendarsContainer.addView(calendarItemRow);
+					if(mCurrentCalendarId==null)
+					{
+						mCurrentCalendarId = CalendarUtil.ownCalendarMapVsZuId.get(mCurrentZuid).get(calendarId);
+						calendarsSpinner.set(mCurrentCalendarId);
+					}
+				}
+
+Good Practice: 
+
+for(String calendarId:calendarIdSet)
+				{
+					View calendarItemRow = inflateView();
+					calendarsContainer.addView(calendarItemRow);
+					if(mCurrentCalendarId==null)
+					{
+						mCurrentCalendarId = CalendarUtil.ownCalendarMapVsZuId.get(mCurrentZuid).get(calendarId);
+						calendarsSpinner.set(mCurrentCalendarId);
+					}
+				}
+
+fun inflateView() {
+View calendarItemRow = getActivity().getLayoutInflater().inflate(R.layout.add_event_spinner_item, null);
+					calendarItemRow.setOnClickListener(mCalendarClickListener);
+					((TextView) calendarItemRow).setText(CalendarUtil.ownCalendarMapVsZuId.get(mCurrentZuid).get(calendarId));
+}
+
+Fewer Arguments.
+
+Bad Practice:
+
+String evId = CalendarUtil.addEvent(params[0], params[3], sCal.get(Calendar.DAY_OF_MONTH), sCal.get(Calendar.MONTH) + 1, sCal.get(Calendar.YEAR), sCal.get(Calendar.HOUR_OF_DAY), sCal.get(Calendar.MINUTE),
+					eCal.get(Calendar.DAY_OF_MONTH), eCal.get(Calendar.MONTH) + 1, eCal.get(Calendar.YEAR), eCal.get(Calendar.HOUR_OF_DAY), eCal.get(Calendar.MINUTE),
+					params[1], params[2], allDay ? 1 : 0, 0, 0, repValue, null, remValue, null, null, null, null, null, null, attendees, -1, null, CursorUtil.getInstance().getCalendarKey(params[3]), null, 3, time, params[4], sCal.getTimeInMillis(), eCal.getTimeInMillis());
+
+Good Practice:
+
+String evId = CalendarUtil.addEvent(event: Event)
+
