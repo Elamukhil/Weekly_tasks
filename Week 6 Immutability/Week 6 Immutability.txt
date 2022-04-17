@@ -1,0 +1,60 @@
+Immutabiltiy:
+
+Immutable objects are thread safe.
+
+Concurrent modification:
+
+fun main() {
+    val accounts = mutableListOf<String>("1","2")
+    for(account in accounts){
+    accounts.add("3")
+}
+    println(accounts)
+}
+
+Exception in thread "main" java.util.ConcurrentModificationException
+ at java.util.ArrayList$Itr.checkForComodification (:-1) 
+ at java.util.ArrayList$Itr.next (:-1) 
+ at FileKt.main (File.kt:4) 
+
+
+
+fun main() {
+    val accounts = mutableListOf<String>("1","2")
+    val temp = accounts.toMutableList()
+    for(account in accounts){
+    temp.add("3")
+}
+    println(temp)
+}
+
+
+
+Bad Practice:
+
+data class Contact(
+    val contactId : Int,
+    val name : String,
+    val address : Address,
+    val emailId : String,
+    val phone : List<String>,
+    var isFavourite : Boolean
+)
+
+
+Here isFavourited is var which mean it can be changed when user marks an contact as favourite.
+
+But in functional programming, state should not be changed.
+
+We can have var in domain class only in exceptional circumstances like performance issues.
+
+Good Practice:
+
+data class Contact(
+    val contactId : Int,
+    val name : String,
+    val address : Address,
+    val emailId : String,
+    val phone : List<String>,
+    val isFavourite : Boolean
+)
