@@ -1,0 +1,140 @@
+Java:
+
+String s1 = "HELLO";
+        String s2 = "HELLO";
+        String s3 =  new String("HELLO");
+ 
+        System.out.println(s1 == s2); // true
+        System.out.println(s1 == s3); // false
+        System.out.println(s1.equals(s2)); // true
+        System.out.println(s1.equals(s3)); // true
+
+
+public class HashcodeEquals {
+
+    public static void main(String[] args) {
+        Student alex1 = new Student(1, "Alex");
+        Student alex2 = new Student(1, "Alex");
+
+        System.out.println("alex1 hashcode = " + alex1.hashCode());
+        System.out.println("alex2 hashcode = " + alex2.hashCode());
+        System.out.println("Checking equality between alex1 and alex2 = " + alex1.equals(alex2));
+    }
+}
+
+alex1 hashcode = 1852704110
+alex2 hashcode = 2032578917
+Checking equality between alex1 and alex2 = false
+
+@Override
+public boolean equals(Object obj) {
+    if (obj == null) return false;
+    if (!(obj instanceof Student))
+        return false;
+    if (obj == this)
+        return true;
+    return this.getId() == ((Student) obj).getId() && this.getName() == ((Student) obj).getName();
+}
+
+alex1 hashcode = 2032578917
+alex2 hashcode = 1531485190
+Checking equality between alex1 and alex2 = true
+
+public class Person {
+
+      private Integer age;
+      private String name;
+    
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        Person person = (Person) o;
+        return age == person.age &&
+                name.equals(person.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, age);
+    }
+
+      }
+
+
+Map<Person, String> map = new HashMap();
+map.put(person1, "1");
+map.put(person2, "2");
+
+When the hashcode method is not overriden , the hascode will be different for two objects, it violates object contract.
+
+But when it is overrided, the hashcode will be same.
+
+It is handled in kotlin by data class.
+
+Kotlin:
+
+== compares the value
+equals compares the value
+=== compares the reference of the variable
+
+val a = 10
+val b = 10
+
+println(a == b)        // true
+println(a.equals(b))   // true
+println(a === b)       // true
+
+For primitive data type === will also compares the value.
+
+val a = Integer(10)
+val b = Integer(10)
+
+println(a == b)       //true
+println(a.equals(b))  //true
+println(a === b)      //false
+
+
+class Employee (val name: String)
+val emp1 = Employee(“Suneet”)
+val emp2 = Employee(“Suneet”)
+
+println(emp1 == emp2)      //false
+println(emp1.equals(emp2)) //false
+println(emp1 === emp2)     //false
+
+println(emp1.name == emp2.name)       //true
+println(emp1.name.equals(emp2.name))  //true
+println(emp1.name === emp2.name)      //true
+
+If it’s a normal class the compiler consider both the objects as the different objects even if the content is same.
+
+
+data class Employee (val name: String)
+val emp1 = Employee("Suneet")
+val emp2 = Employee("Suneet")
+
+println(emp1 == emp2)         //true
+println(emp1.equals(emp2))    //true
+println(emp1 === emp2)        //false
+
+println(emp1.name == emp2.name)      //true
+println(emp1.name.equals(emp2.name)) //true
+println(emp1.name === emp2.name)     //true
+
+If it's data class, it compares the data.
+
+
+val negZero = -0.0f
+val posZero = 0.0f
+
+println(negZero == posZero)         //true
+println(negZero.equals(posZero))    //false
+println(negZero === posZero)        //true
+
+As in the case of Float and Double comparison, .equals disagrees with the IEEE 754 Standard for Floating-Point Arithmetic, it returns a false when -0.0 was compared with 0.0 whereas == and === returns true.
+
+
+
+Equality should be an equivalence relation (reflexive, symmetric, transitive).
+Equality and hash code must be consistent with each other, so that data structures that use hash tables (like HashSet and HashMap) work properly.
